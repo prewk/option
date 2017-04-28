@@ -1,4 +1,4 @@
-# PHP Option Object [![Build Status](https://travis-ci.org/prewk/option.svg)](https://travis-ci.org/prewk/option) [![Coverage Status](https://coveralls.io/repos/github/prewk/result/badge.svg?branch=master)](https://coveralls.io/github/prewk/result?branch=master)
+# PHP Option Object [![Build Status](https://travis-ci.org/prewk/option.svg)](https://travis-ci.org/prewk/option) [![Coverage Status](https://coveralls.io/repos/github/prewk/option/badge.svg?branch=master)](https://coveralls.io/github/prewk/option?branch=master)
 
 A PHP implementation of [Rust's Option type](https://doc.rust-lang.org/std/option/enum.Option.html) with roughly the same API.
 

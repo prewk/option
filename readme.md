@@ -45,3 +45,4 @@ $value = findSomething()->expect(new Exception("Oh noes!"));
 ## License
 
 MIT & Apache 2.0
+

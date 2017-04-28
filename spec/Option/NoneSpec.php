@@ -5,6 +5,7 @@ namespace spec\Prewk\Option;
 use Exception;
 use Prewk\Option\None;
 use PhpSpec\ObjectBehavior;
+use Prewk\Option\OptionException;
 use Prewk\Option\Some;
 
 class NoneSpec extends ObjectBehavior
@@ -96,4 +97,10 @@ class NoneSpec extends ObjectBehavior
         })->unwrap()->shouldBe("value");
     }
 
+    function it_throws_on_orElse_closure_return_type_mismatch()
+    {
+        $this->shouldThrow(OptionException::class)->during("orElse", [function() {
+            return "Not an option";
+        }]);
+    }
 }

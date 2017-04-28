@@ -5,6 +5,7 @@ namespace spec\Prewk\Option;
 use Exception;
 use Prewk\Option;
 use Prewk\Option\None;
+use Prewk\Option\OptionException;
 use Prewk\Option\Some;
 use PhpSpec\ObjectBehavior;
 
@@ -105,6 +106,14 @@ class SomeSpec extends ObjectBehavior
             $otherResult = new Some($value . "bar");
             return $otherResult;
         })->shouldBe($otherResult);
+    }
+
+    function it_throws_on_andThen_closure_return_type_mismatch()
+    {
+        $this->beConstructedWith("foo");
+        $this->shouldThrow(OptionException::class)->during("andThen", [function() {
+            return "Not an option";
+        }]);
     }
 
     function it_ors()

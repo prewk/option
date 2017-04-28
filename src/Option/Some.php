@@ -162,7 +162,7 @@ class Some implements Option
      *
      * @param Closure $op
      * @return Option
-     * @throws OptionException if op returns a non-Option
+     * @throws OptionException on closure return type mismatch
      */
     public function andThen(Closure $op): Option
     {

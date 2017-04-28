@@ -174,13 +174,14 @@ class None implements Option
      *
      * @param Closure $op
      * @return Option
+     * @throws OptionException on closure return type mismatch
      */
     public function orElse(Closure $op): Option
     {
         $option = $op();
 
         if (!($option instanceof Option)) {
-            throw new ResultException("Op must return an Option");
+            throw new OptionException("Op must return an Option");
         }
 
         return $option;

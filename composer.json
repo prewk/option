@@ -1,5 +1,4 @@
 {
-    "version": "0.0.1",
     "name": "prewk/option",
     "description": "Option object for PHP inspired by Rust",
     "type": "library",

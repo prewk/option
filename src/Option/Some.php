@@ -13,6 +13,8 @@ namespace Prewk\Option;
 use Closure;
 use Exception;
 use Prewk\Option;
+use Prewk\Result;
+use Prewk\Result\Ok;
 
 /**
  * Some
@@ -195,5 +197,27 @@ class Some implements Option
     public function orElse(Closure $op): Option
     {
         return $this;
+    }
+
+    /**
+     * Transforms the Option<T> into a Result<T, E>, mapping Some(v) to Ok(v) and None to Err(err).
+     *
+     * @param mixed $err
+     * @return mixed
+     */
+    public function okOr($err): Result
+    {
+        return new Ok($this->value);
+    }
+
+    /**
+     * Transforms the Option<T> into a Result<T, E>, mapping Some(v) to Ok(v) and None to Err(err()).
+     *
+     * @param Closure $err
+     * @return Result
+     */
+    public function okOrElse(Closure $err): Result
+    {
+        return new Ok($this->value);
     }
 }

@@ -4,10 +4,10 @@ namespace spec\Prewk\Option;
 
 use Exception;
 use Prewk\Option;
-use Prewk\Option\None;
 use Prewk\Option\OptionException;
 use Prewk\Option\Some;
 use PhpSpec\ObjectBehavior;
+use Prewk\Result\Ok;
 
 class SomeSpec extends ObjectBehavior
 {
@@ -126,5 +126,23 @@ class SomeSpec extends ObjectBehavior
     {
         $this->beConstructedWith("value");
         $this->orElse(function() {})->unwrap()->shouldBe("value");
+    }
+
+    function it_converts_into_ok_with_okOr()
+    {
+        $this->beConstructedWith("value");
+        $result = $this->okOr("ignored");
+
+        $result->shouldHaveType(Ok::class);
+        $result->unwrap()->shouldBe("value");
+    }
+
+    function it_converts_into_ok_with_okOrElse()
+    {
+        $this->beConstructedWith("value");
+        $result = $this->okOrElse(function() {});
+
+        $result->shouldHaveType(Ok::class);
+        $result->unwrap()->shouldBe("value");
     }
 }

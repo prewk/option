@@ -92,6 +92,22 @@ interface Option
     public function mapOrElse(Closure $default, Closure $mapper);
 
     /**
+     * Transforms the Option<T> into a Result<T, E>, mapping Some(v) to Ok(v) and None to Err(err).
+     *
+     * @param mixed $err
+     * @return mixed
+     */
+    public function okOr($err): Result;
+
+    /**
+     * Transforms the Option<T> into a Result<T, E>, mapping Some(v) to Ok(v) and None to Err(err()).
+     *
+     * @param Closure $err
+     * @return Result
+     */
+    public function okOrElse(Closure $err): Result;
+
+    /**
      * Returns an iterator over the possibly contained value.
      * The iterator yields one value if the result is Some, otherwise none.
      *

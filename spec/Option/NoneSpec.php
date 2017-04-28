@@ -7,6 +7,7 @@ use Prewk\Option\None;
 use PhpSpec\ObjectBehavior;
 use Prewk\Option\OptionException;
 use Prewk\Option\Some;
+use Prewk\Result\Err;
 
 class NoneSpec extends ObjectBehavior
 {
@@ -102,5 +103,21 @@ class NoneSpec extends ObjectBehavior
         $this->shouldThrow(OptionException::class)->during("orElse", [function() {
             return "Not an option";
         }]);
+    }
+
+    function it_converts_into_err_with_okOr()
+    {
+        $result = $this->okOr("error");
+
+        $result->shouldHaveType(Err::class);
+        $result->unwrapErr()->shouldBe("error");
+    }
+
+    function it_converts_into_err_with_okOrElse()
+    {
+        $result = $this->okOrElse(function() { return "error"; });
+
+        $result->shouldHaveType(Err::class);
+        $result->unwrapErr()->shouldBe("error");
     }
 }

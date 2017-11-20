@@ -47,7 +47,7 @@ class From
      * @param $thing T|[]|null|0
      * @return Option Option<T>
      */
-    public function emptyable($thing): Option
+    public static function emptyable($thing): Option
     {
         return !empty($thing) ? new Some($thing) : new None;
     }

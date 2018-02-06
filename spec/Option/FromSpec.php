@@ -3,6 +3,7 @@
 namespace spec\Prewk\Option;
 
 use PhpSpec\ObjectBehavior;
+use Prewk\Option\OptionException;
 
 class FromSpec extends ObjectBehavior
 {
@@ -43,5 +44,12 @@ class FromSpec extends ObjectBehavior
         $this::emptyable(0)->isNone()->shouldBe(true);
         $this::emptyable("0")->isNone()->shouldBe(true);
         $this::emptyable([])->isNone()->shouldBe(true);
+    }
+
+    function it_creates_a_some_from_an_iterable_value()
+    {
+        $this::first([])->isNone()->shouldBe(true);
+        $this::first(["foo"])->isSome()->shouldBe(true);
+        $this->shouldThrow(OptionException::class)->during("first", [null]);
     }
 }

@@ -51,4 +51,23 @@ class From
     {
         return !empty($thing) ? new Some($thing) : new None;
     }
+
+    /**
+     * Iterates over T and creates a Some<V> from the first item, returning None if T is empty
+     *
+     * @param $iterable Iterable T<V>
+     * @return Option Option<V>
+     */
+    public static function first($iterable): Option
+    {
+        if (!is_iterable($iterable)) {
+            throw new OptionException("Couldn't create Option from first item in non-iterable");
+        }
+
+        foreach ($iterable as $item) {
+            return new Some($item);
+        }
+
+        return new None;
+    }
 }

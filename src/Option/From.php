@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace Prewk\Option;
 
+use Traversable;
 use Prewk\Option;
 
 /**
@@ -59,7 +60,7 @@ class From
      */
     public static function first($iterable): Option
     {
-        if (!is_iterable($iterable)) {
+        if (!is_array($iterable) && !($iterable instanceof Traversable)) {
             throw new OptionException("Couldn't create Option from first item in non-iterable");
         }
 

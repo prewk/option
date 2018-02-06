@@ -37,7 +37,6 @@ class From
      */
     public static function key(array $coll, $key): Option
     {
-
         return array_key_exists($key, $coll) ? new Some($coll[$key]) : new None;
     }
 

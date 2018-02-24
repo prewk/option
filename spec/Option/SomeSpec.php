@@ -148,8 +148,8 @@ class SomeSpec extends ObjectBehavior
 
     function it_maps_with_pass_args()
     {
-        $this->beConstructedWith("foo", "bar", "baz");
-        $option = $this->map(function($foo, $bar, $baz) {
+        $this->beConstructedWith("foo");
+        $option = $this->with("bar", "baz")->map(function($foo, $bar, $baz) {
             return $foo . $bar . $baz;
         });
 
@@ -159,16 +159,16 @@ class SomeSpec extends ObjectBehavior
 
     function it_mapOrs_with_pass_args()
     {
-        $this->beConstructedWith("foo", "bar", "baz");
-        $this->mapOr("ignored", function($foo, $bar, $baz) {
+        $this->beConstructedWith("foo");
+        $this->with("bar", "baz")->mapOr("ignored", function($foo, $bar, $baz) {
             return $foo . $bar . $baz;
         })->shouldBe("foobarbaz");
     }
 
     function it_mapOrElses_with_pass_args()
     {
-        $this->beConstructedWith("foo", "bar", "baz");
-        $this->mapOrElse(
+        $this->beConstructedWith("foo");
+        $this->with("bar", "baz")->mapOrElse(
             function() {
 
             },
@@ -180,8 +180,8 @@ class SomeSpec extends ObjectBehavior
 
     function it_andThens_with_pass_args()
     {
-        $this->beConstructedWith("foo", "bar", "baz");
-        $option = $this->andThen(function($foo, $bar, $baz) {
+        $this->beConstructedWith("foo");
+        $option = $this->with("bar", "baz")->andThen(function($foo, $bar, $baz) {
             return new Some($foo . $bar . $baz);
         });
 
@@ -190,8 +190,8 @@ class SomeSpec extends ObjectBehavior
 
     function it_okOrs_with_pass_args()
     {
-        $this->beConstructedWith("foo", "bar", "baz");
-        $result = $this->okOr("ignored");
+        $this->beConstructedWith("foo");
+        $result = $this->with("bar", "baz")->okOr("ignored");
 
         $result->shouldHaveType(Ok::class);
         $result->unwrap()->shouldBe("foo");

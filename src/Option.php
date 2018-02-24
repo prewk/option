@@ -147,4 +147,12 @@ interface Option
      * @return Option
      */
     public function orElse(Closure $op): Option;
+
+    /**
+     * The attached pass-through args will be unpacked into extra args into chained closures
+     *
+     * @param array ...$args
+     * @return Option
+     */
+    public function with(...$args): Option;
 }

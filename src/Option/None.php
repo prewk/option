@@ -22,9 +22,18 @@ use Prewk\Result\Err;
 class None implements Option
 {
     /**
-     * None constructor.
+     * @var array
      */
-    public function __construct() {}
+    private $pass;
+
+    /**
+     * None constructor
+     *
+     * @param array ...$pass
+     */
+    public function __construct(...$pass) {
+        $this->pass = $pass;
+    }
 
     /**
      * Returns true if the option is a Some value.
@@ -88,7 +97,7 @@ class None implements Option
      */
     public function unwrapOrElse(Closure $op)
     {
-        return $op();
+        return $op(...$this->pass);
     }
 
     /**
@@ -123,7 +132,7 @@ class None implements Option
      */
     public function mapOrElse(Closure $default, Closure $mapper)
     {
-        return $default();
+        return $default(...$this->pass);
     }
 
     /**
@@ -180,7 +189,7 @@ class None implements Option
      */
     public function orElse(Closure $op): Option
     {
-        $option = $op();
+        $option = $op(...$this->pass);
 
         if (!($option instanceof Option)) {
             throw new OptionException("Op must return an Option");
@@ -197,7 +206,7 @@ class None implements Option
      */
     public function okOr($err): Result
     {
-        return new Err($err);
+        return new Err($err, ...$this->pass);
     }
 
     /**
@@ -208,6 +217,19 @@ class None implements Option
      */
     public function okOrElse(Closure $err): Result
     {
-        return new Err($err());
+        return new Err($err(...$this->pass), ...$this->pass);
+    }
+
+    /**
+     * The attached pass-through args will be unpacked into extra args into chained closures
+     *
+     * @param array ...$args
+     * @return Option
+     */
+    public function with(...$args): Option
+    {
+        $this->pass = $args;
+
+        return $this;
     }
 }

@@ -120,4 +120,54 @@ class NoneSpec extends ObjectBehavior
         $result->shouldHaveType(Err::class);
         $result->unwrapErr()->shouldBe("error");
     }
+
+    function it_unwrapOrElses_with_pass_args()
+    {
+        $this->with("foo", "bar")->unwrapOrElse(function($foo, $bar) {
+            return $foo . $bar;
+        })->shouldBe("foobar");
+    }
+
+    function it_mapOrElses_with_pass_args()
+    {
+        $this->with("foo", "bar")->mapOrElse(
+            function($foo, $bar) {
+                return $foo . $bar;
+            },
+            function($value) {
+
+            }
+        )->shouldBe("foobar");
+    }
+
+    function it_orElses_with_pass_args()
+    {
+        $this->with("foo", "bar")->orElse(function($foo, $bar) {
+            return new Some($foo . $bar);
+        })->unwrap()->shouldBe("foobar");
+    }
+
+    function it_okOrs_with_pass_args()
+    {
+        $result = $this->with("foo", "bar")->okOr("error");
+
+        $result->shouldHaveType(Err::class);
+        $result->unwrapErr()->shouldBe("error");
+
+        $result->mapErr(function($error, $foo, $bar) {
+            return $error . $foo . $bar;
+        })->unwrapErr()->shouldBe("errorfoobar");
+    }
+
+    function it_okOrElses_with_pass_args()
+    {
+        $result = $this->with("foo", "bar")->okOrElse(function() { return "error"; });
+
+        $result->shouldHaveType(Err::class);
+        $result->unwrapErr()->shouldBe("error");
+
+        $result->mapErr(function($error, $foo, $bar) {
+            return $error . $foo . $bar;
+        })->unwrapErr()->shouldBe("errorfoobar");
+    }
 }

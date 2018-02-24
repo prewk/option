@@ -27,13 +27,20 @@ class Some implements Option
     private $value;
 
     /**
+     * @var array
+     */
+    private $pass;
+
+    /**
      * Some constructor.
      *
      * @param $value
+     * @param array ...$pass
      */
-    public function __construct($value)
+    public function __construct($value, ...$pass)
     {
         $this->value = $value;
+        $this->pass = $pass;
     }
 
     /**
@@ -109,7 +116,7 @@ class Some implements Option
      */
     public function map(Closure $mapper): Option
     {
-        return new self($mapper($this->value));
+        return new self($mapper($this->value, ...$this->pass));
     }
 
     /**
@@ -121,7 +128,7 @@ class Some implements Option
      */
     public function mapOr($default, Closure $mapper)
     {
-        return $mapper($this->value);
+        return $mapper($this->value, ...$this->pass);
     }
 
     /**
@@ -133,7 +140,7 @@ class Some implements Option
      */
     public function mapOrElse(Closure $default, Closure $mapper)
     {
-        return $mapper($this->value);
+        return $mapper($this->value, ...$this->pass);
     }
 
     /**
@@ -168,7 +175,7 @@ class Some implements Option
      */
     public function andThen(Closure $op): Option
     {
-        $result = $op($this->value);
+        $result = $op($this->value, ...$this->pass);
 
         if (!($result instanceof Option)) {
             throw new OptionException("Op must return an Option");
@@ -207,7 +214,7 @@ class Some implements Option
      */
     public function okOr($err): Result
     {
-        return new Ok($this->value);
+        return new Ok($this->value, ...$this->pass);
     }
 
     /**
@@ -218,6 +225,19 @@ class Some implements Option
      */
     public function okOrElse(Closure $err): Result
     {
-        return new Ok($this->value);
+        return new Ok($this->value, ...$this->pass);
+    }
+
+    /**
+     * The attached pass-through args will be unpacked into extra args into chained closures
+     *
+     * @param array ...$args
+     * @return Option
+     */
+    public function with(...$args): Option
+    {
+        $this->pass = $args;
+
+        return $this;
     }
 }

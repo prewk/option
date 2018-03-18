@@ -13,6 +13,7 @@ namespace Prewk;
 use Closure;
 use Exception;
 use Prewk\Option\{OptionException, Some, None};
+use Traversable;
 
 /**
  * @template T

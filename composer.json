@@ -9,7 +9,7 @@
         }
     },
     "scripts": {
-        "test": "phpspec run"
+        "test": "phpspec run && psalm"
     },
     "config": {
         "bin-dir": "bin"

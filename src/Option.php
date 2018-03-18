@@ -39,7 +39,8 @@ abstract class Option
      *
      * @throws the message if the value is a None.
      * @param Exception $msg
-     * @return T
+     * @return mixed
+     * @psalm-return T
      */
     abstract public function expect(Exception $msg);
 
@@ -47,7 +48,8 @@ abstract class Option
      * Unwraps an option, yielding the content of a Some.
      *
      * @throws if the value is a None.
-     * @return T
+     * @return mixed
+     * @psalm-return T
      */
     abstract public function unwrap();
 

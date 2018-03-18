@@ -5,7 +5,7 @@ namespace spec\Prewk\Option;
 use Exception;
 use Prewk\Option;
 use Prewk\Option\OptionException;
-use Prewk\Option\Some;
+use Prewk\Option\{Some, None};
 use PhpSpec\ObjectBehavior;
 use Prewk\Result\Ok;
 
@@ -199,5 +199,70 @@ class SomeSpec extends ObjectBehavior
         $result->map(function($foo, $bar, $baz) {
             return $foo . $bar . $baz;
         })->unwrap()->shouldBe("foobarbaz");
+    }
+
+    function it_creates_a_some_from_a_set_thing()
+    {
+        $this->beConstructedThrough("fromNullable", ["foo"]);
+        $this->shouldHaveType(Some::class);
+        $this->unwrap()->shouldBe("foo");
+    }
+
+    function it_creates_a_none_from_an_unset_thing()
+    {
+        $this->beConstructedThrough("fromNullable", [null]);
+        $this->shouldHaveType(None::class);
+    }
+
+    function it_creates_a_some_from_an_existing_key()
+    {
+        $this->beConstructedThrough("fromKey", [["foo" => 123], "foo"]);
+        $this->shouldHaveType(Some::class);
+        $this->unwrap()->shouldBe(123);
+    }
+
+    function it_creates_a_some_from_an_existing_key_with_a_null_value()
+    {
+        $this->beConstructedThrough("fromKey", [["foo" => null], "foo"]);
+        $this->shouldHaveType(Some::class);
+        $this->unwrap()->shouldBe(null);
+    }
+
+    function it_creates_a_none_from_a_missing_key()
+    {
+        $this->beConstructedThrough("fromKey", [["foo" => 123], "bar"]);
+        $this->shouldHaveType(None::class);
+    }
+
+    function it_creates_a_some_from_a_non_empty_value()
+    {
+        $this->beConstructedThrough("fromEmptyable", ["something"]);
+        $this->shouldHaveType(Some::class);
+        $this->unwrap()->shouldBe("something");
+    }
+
+    function it_creates_a_none_from_an_empty_value()
+    {
+        $this->beConstructedThrough("fromEmptyable", [""]);
+        $this->shouldHaveType(None::class);
+    }
+
+    function it_creates_a_some_from_an_iterable_value()
+    {
+        $this->beConstructedThrough("fromFirst", [["foo"]]);
+        $this->shouldHaveType(Some::class);
+        $this->unwrap()->shouldBe("foo");
+    }
+
+    function it_creates_a_none_from_an_empty_iterable_value()
+    {
+        $this->beConstructedThrough("fromFirst", [[]]);
+        $this->shouldHaveType(None::class);
+    }
+
+    function it_throws_on_non_iterable()
+    {
+        $this->beConstructedThrough("fromFirst", [null]);
+        $this->shouldThrow(OptionException::class)->duringInstantiation();
     }
 }

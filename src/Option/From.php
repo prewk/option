@@ -21,7 +21,7 @@ class From
     /**
      * Create a Some<T> if T is something using isset(T), None otherwise
      *
-     * @param $thing T|null
+     * @param mixed $thing
      * @return Option Option<T>
      */
     public static function nullable($thing): Option
@@ -33,7 +33,7 @@ class From
      * Create a Some<V> from C[K] if it exists using array_key_exists(C, K), None otherwise
      *
      * @param array $coll C
-     * @param $key K
+     * @param mixed $key
      * @return Option Option<V>
      */
     public static function key(array $coll, $key): Option
@@ -44,7 +44,7 @@ class From
     /**
      * Create a Some<T> if T is non-empty using empty(T), None otherwise
      *
-     * @param $thing T|[]|null|0
+     * @param mixed $thing
      * @return Option Option<T>
      */
     public static function emptyable($thing): Option
@@ -55,8 +55,9 @@ class From
     /**
      * Iterates over T and creates a Some<V> from the first item, returning None if T is empty
      *
-     * @param $iterable Iterable T<V>
+     * @param array|Iterable $iterable T<V>
      * @return Option Option<V>
+     * @throws OptionException
      */
     public static function first($iterable): Option
     {

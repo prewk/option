@@ -17,12 +17,16 @@ use Prewk\Result;
 use Prewk\Result\Ok;
 
 /**
+ * @template T
  * Some
+ *
+ * @inherits Option<T>
  */
-class Some implements Option
+class Some extends Option
 {
     /**
-     * @var
+     * @var mixed
+     * @psalm-var T
      */
     private $value;
 
@@ -34,7 +38,8 @@ class Some implements Option
     /**
      * Some constructor.
      *
-     * @param $value
+     * @param mixed $value
+     * @psalm-param T $value
      * @param array ...$pass
      */
     public function __construct($value, ...$pass)
@@ -69,6 +74,7 @@ class Some implements Option
      * @throws the message if the value is a None.
      * @param Exception $msg
      * @return mixed
+     * @psalm-return T
      */
     public function expect(Exception $msg)
     {
@@ -80,6 +86,7 @@ class Some implements Option
      *
      * @throws if the value is a None.
      * @return mixed
+     * @psalm-return T
      */
     public function unwrap()
     {
@@ -91,6 +98,7 @@ class Some implements Option
      *
      * @param mixed $optb
      * @return mixed
+     * @psalm-return T
      */
     public function unwrapOr($optb)
     {
@@ -102,6 +110,7 @@ class Some implements Option
      *
      * @param Closure $op
      * @return mixed
+     * @psalm-return T
      */
     public function unwrapOrElse(Closure $op)
     {
@@ -148,6 +157,7 @@ class Some implements Option
      * The iterator yields one value if the result is Some, otherwise none.
      *
      * @return array
+     * @psalm-return array<int, mixed>
      */
     public function iter(): array
     {
@@ -210,7 +220,7 @@ class Some implements Option
      * Transforms the Option<T> into a Result<T, E>, mapping Some(v) to Ok(v) and None to Err(err).
      *
      * @param mixed $err
-     * @return mixed
+     * @return Result
      */
     public function okOr($err): Result
     {

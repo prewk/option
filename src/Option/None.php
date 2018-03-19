@@ -17,9 +17,14 @@ use Prewk\Result;
 use Prewk\Result\Err;
 
 /**
- * None
+ * No value
+ *
+ * @template T
+ * The optional value
+ *
+ * @inherits Option<T>
  */
-class None implements Option
+class None extends Option
 {
     /**
      * @var array
@@ -61,6 +66,7 @@ class None implements Option
      * @throws Exception (the message) if the value is a None.
      * @param Exception $msg
      * @return mixed
+     * @psalm-return T
      */
     public function expect(Exception $msg)
     {
@@ -72,6 +78,7 @@ class None implements Option
      *
      * @throws OptionException if the value is a None.
      * @return mixed
+     * @psalm-return T
      */
     public function unwrap()
     {
@@ -140,6 +147,7 @@ class None implements Option
      * The iterator yields one value if the result is Some, otherwise none.
      *
      * @return array
+     * @psalm-return array<int, mixed>
      */
     public function iter(): array
     {
@@ -202,7 +210,7 @@ class None implements Option
      * Transforms the Option<T> into a Result<T, E>, mapping Some(v) to Ok(v) and None to Err(err).
      *
      * @param mixed $err
-     * @return mixed
+     * @return Result
      */
     public function okOr($err): Result
     {

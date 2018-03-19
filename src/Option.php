@@ -16,8 +16,10 @@ use Prewk\Option\{OptionException, Some, None};
 use Traversable;
 
 /**
+ * Describes an optional value
+ *
  * @template T
- * Describes a Option
+ * The optional value
  */
 abstract class Option
 {
@@ -58,7 +60,6 @@ abstract class Option
      * Unwraps a result, yielding the content of a Some. Else, it returns optb.
      *
      * @param mixed $optb
-     * @psalm-param T $optb
      * @return mixed
      * @psalm-return T|mixed
      */
@@ -103,7 +104,8 @@ abstract class Option
      * Transforms the Option<T> into a Result<T, E>, mapping Some(v) to Ok(v) and None to Err(err).
      *
      * @param mixed $err
-     * @return Result<T, mixed>
+     * @return Result
+     * @psalm-return Result<T, mixed>
      */
     abstract public function okOr($err): Result;
 
@@ -111,7 +113,8 @@ abstract class Option
      * Transforms the Option<T> into a Result<T, E>, mapping Some(v) to Ok(v) and None to Err(err()).
      *
      * @param Closure $err
-     * @return Result<T, mixed>
+     * @return Result
+     * @psalm-return Result<T, mixed>
      */
     abstract public function okOrElse(Closure $err): Result;
 

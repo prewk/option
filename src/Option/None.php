@@ -17,8 +17,10 @@ use Prewk\Result;
 use Prewk\Result\Err;
 
 /**
+ * No value
+ *
  * @template T
- * None
+ * The optional value
  *
  * @inherits Option<T>
  */

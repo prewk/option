@@ -10,8 +10,13 @@ if (!function_exists("some")) {
      * Represent the existance of a value
      *
      * @codeCoverageIgnore
+     *
+     * @template T
+     *
      * @param mixed $value
+     * @psalm-param T $value
      * @return Prewk\Option\Some
+     * @psalm-return Prewk\Option\Some<T>
      */
     function some($value): Prewk\Option\Some {
         return new Prewk\Option\Some($value);

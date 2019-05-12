@@ -73,7 +73,6 @@ class Some extends Option
     /**
      * Unwraps a result, yielding the content of a Some.
      *
-     * @throws the message if the value is a None.
      * @param Exception $msg
      * @return mixed
      * @psalm-return T
@@ -86,7 +85,6 @@ class Some extends Option
     /**
      * Unwraps an option, yielding the content of a Some.
      *
-     * @throws if the value is a None.
      * @return mixed
      * @psalm-return T
      */
@@ -99,6 +97,7 @@ class Some extends Option
      * Unwraps a result, yielding the content of a Some. Else, it returns optb.
      *
      * @param mixed $optb
+     * @psalm-param T $optb
      * @return mixed
      * @psalm-return T
      */
@@ -111,6 +110,7 @@ class Some extends Option
      * Returns the contained value or computes it from a closure.
      *
      * @param Closure $op
+     * @psalm-param Closure(mixed...):T $op
      * @return mixed
      * @psalm-return T
      */
@@ -122,8 +122,12 @@ class Some extends Option
     /**
      * Maps an Option by applying a function to a contained Some value, leaving a None value untouched.
      *
+     * @template U
+     *
      * @param Closure $mapper
+     * @psalm-param Closure(T=,mixed...):U $mapper
      * @return Option
+     * @psalm-return Option<U>
      */
     public function map(Closure $mapper): Option
     {
@@ -133,9 +137,14 @@ class Some extends Option
     /**
      * Applies a function to the contained value (if any), or returns a default (if not).
      *
+     * @template U
+     *
      * @param mixed $default
+     * @psalm-param U $default
      * @param Closure $mapper
+     * @psalm-param Closure(T=,mixed...):U $mapper
      * @return mixed
+     * @psalm-return U
      */
     public function mapOr($default, Closure $mapper)
     {
@@ -145,9 +154,14 @@ class Some extends Option
     /**
      * Applies a function to the contained value (if any), or computes a default (if not).
      *
+     * @template U
+     *
      * @param Closure $default
+     * @psalm-param Closure(mixed...):U $default
      * @param Closure $mapper
+     * @psalm-param Closure(T=,mixed...):U $mapper
      * @return mixed
+     * @psalm-return U
      */
     public function mapOrElse(Closure $default, Closure $mapper)
     {
@@ -159,7 +173,7 @@ class Some extends Option
      * The iterator yields one value if the result is Some, otherwise none.
      *
      * @return array
-     * @psalm-return array<int, mixed>
+     * @psalm-return array<int, T>
      */
     public function iter(): array
     {
@@ -169,8 +183,12 @@ class Some extends Option
     /**
      * Returns None if the option is None, otherwise returns optb.
      *
+     * @template U
+     *
      * @param Option $optb
+     * @psalm-param Option<U> $optb
      * @return Option
+     * @psalm-return Option<U>
      */
     public function and(Option $optb): Option
     {
@@ -181,9 +199,17 @@ class Some extends Option
      * Returns None if the option is None, otherwise calls op with the wrapped value and returns the result.
      * Some languages call this operation flatmap.
      *
+     * @template U
+     *
      * @param Closure $op
+     * @psalm-param Closure(T=,mixed...):Option<U> $op
      * @return Option
+     * @psalm-return Option<U>
+     *
      * @throws OptionException on closure return type mismatch
+     * @psalm-assert !Closure(T=):Option $op
+     *
+     * @psalm-suppress DocblockTypeContradiction We cannot be completely sure, that in argument valid callable
      */
     public function andThen(Closure $op): Option
     {
@@ -200,7 +226,9 @@ class Some extends Option
      * Returns the option if it contains a value, otherwise returns optb.
      *
      * @param Option $optb
+     * @psalm-param Option<T> $optb
      * @return Option
+     * @psalm-return Option<T>
      */
     public function or(Option $optb): Option
     {
@@ -211,7 +239,9 @@ class Some extends Option
      * Returns the option if it contains a value, otherwise calls op and returns the result.
      *
      * @param Closure $op
+     * @psalm-param Closure(mixed...):Option<T> $op
      * @return Option
+     * @psalm-return Option<T>
      */
     public function orElse(Closure $op): Option
     {
@@ -221,8 +251,12 @@ class Some extends Option
     /**
      * Transforms the Option<T> into a Result<T, E>, mapping Some(v) to Ok(v) and None to Err(err).
      *
+     * @template E
+     *
      * @param mixed $err
+     * @psalm-param E $err
      * @return Result
+     * @psalm-return Result<T, E>
      */
     public function okOr($err): Result
     {
@@ -232,8 +266,12 @@ class Some extends Option
     /**
      * Transforms the Option<T> into a Result<T, E>, mapping Some(v) to Ok(v) and None to Err(err()).
      *
+     * @template E
+     *
      * @param Closure $err
+     * @psalm-param Closure(mixed...):E $err
      * @return Result
+     * @psalm-return Result<T, E>
      */
     public function okOrElse(Closure $err): Result
     {
@@ -243,8 +281,9 @@ class Some extends Option
     /**
      * The attached pass-through args will be unpacked into extra args into chained closures
      *
-     * @param array ...$args
+     * @param mixed ...$args
      * @return Option
+     * @psalm-return Option<T>
      */
     public function with(...$args): Option
     {

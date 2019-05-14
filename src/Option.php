@@ -40,19 +40,22 @@ abstract class Option
     /**
      * Unwraps a result, yielding the content of a Some.
      *
-     * @throws the message if the value is a None.
+     * @template X as Exception
+     *
      * @param Exception $msg
+     * @psalm-param X&Exception $msg
      * @return mixed
      * @psalm-return T
+     * @throws Exception the message if the value is a None.
      */
     abstract public function expect(Exception $msg);
 
     /**
      * Unwraps an option, yielding the content of a Some.
      *
-     * @throws if the value is a None.
      * @return mixed
      * @psalm-return T
+     * @throws OptionException if the value is a None.
      */
     abstract public function unwrap();
 
@@ -60,8 +63,9 @@ abstract class Option
      * Unwraps a result, yielding the content of a Some. Else, it returns optb.
      *
      * @param mixed $optb
+     * @psalm-param T $optb
      * @return mixed
-     * @psalm-return T|mixed
+     * @psalm-return T
      */
     abstract public function unwrapOr($optb);
 
@@ -69,52 +73,73 @@ abstract class Option
      * Returns the contained value or computes it from a closure.
      *
      * @param Closure $op
+     * @psalm-param Closure(mixed...):T $op
      * @return mixed
-     * @psalm-return T|mixed
+     * @psalm-return T
      */
     abstract public function unwrapOrElse(Closure $op);
 
     /**
      * Maps an Option by applying a function to a contained Some value, leaving a None value untouched.
      *
+     * @template U
+     *
      * @param Closure $mapper
+     * @psalm-param Closure(T=,mixed...):U $mapper
      * @return Option
+     * @psalm-return Option<U>
      */
     abstract public function map(Closure $mapper): Option;
 
     /**
      * Applies a function to the contained value (if any), or returns a default (if not).
      *
+     * @template U
+     *
      * @param mixed $default
+     * @psalm-param U $default
      * @param Closure $mapper
+     * @psalm-param Closure(T=,mixed...):U $mapper
      * @return mixed
+     * @psalm-return U
      */
     abstract public function mapOr($default, Closure $mapper);
 
     /**
      * Applies a function to the contained value (if any), or computes a default (if not).
      *
+     * @template U
+     *
      * @param Closure $default
+     * @psalm-param Closure(mixed...):U $default
      * @param Closure $mapper
+     * @psalm-param Closure(T=,mixed...):U $mapper
      * @return mixed
+     * @psalm-return U
      */
     abstract public function mapOrElse(Closure $default, Closure $mapper);
 
     /**
      * Transforms the Option<T> into a Result<T, E>, mapping Some(v) to Ok(v) and None to Err(err).
      *
+     * @template E
+     *
      * @param mixed $err
+     * @psalm-param E $err
      * @return Result
-     * @psalm-return Result<T, mixed>
+     * @psalm-return Result<T, E>
      */
     abstract public function okOr($err): Result;
 
     /**
      * Transforms the Option<T> into a Result<T, E>, mapping Some(v) to Ok(v) and None to Err(err()).
      *
+     * @template E
+     *
      * @param Closure $err
+     * @psalm-param Closure(mixed...):E $err
      * @return Result
-     * @psalm-return Result<T, mixed>
+     * @psalm-return Result<T, E>
      */
     abstract public function okOrElse(Closure $err): Result;
 
@@ -123,15 +148,19 @@ abstract class Option
      * The iterator yields one value if the result is Some, otherwise none.
      *
      * @return array
-     * @psalm-return array<int, mixed>
+     * @psalm-return array<int, T>
      */
     abstract public function iter(): array;
 
     /**
      * Returns None if the option is None, otherwise returns optb.
      *
+     * @template U
+     *
      * @param Option $optb
+     * @psalm-param Option<U> $optb
      * @return Option
+     * @psalm-return Option<U>
      */
     abstract public function and(Option $optb): Option;
 
@@ -139,8 +168,12 @@ abstract class Option
      * Returns None if the option is None, otherwise calls op with the wrapped value and returns the result.
      * Some languages call this operation flatmap.
      *
+     * @template U
+     *
      * @param Closure $op
+     * @psalm-param Closure(T=,mixed...):Option<U> $op
      * @return Option
+     * @psalm-return Option<U>
      */
     abstract public function andThen(Closure $op): Option;
 
@@ -148,7 +181,9 @@ abstract class Option
      * Returns the option if it contains a value, otherwise returns optb.
      *
      * @param Option $optb
+     * @psalm-param Option<T> $optb
      * @return Option
+     * @psalm-return Option<T>
      */
     abstract public function or(Option $optb): Option;
 
@@ -156,23 +191,30 @@ abstract class Option
      * Returns the option if it contains a value, otherwise calls op and returns the result.
      *
      * @param Closure $op
+     * @psalm-param Closure(mixed...):Option<T> $op
      * @return Option
+     * @psalm-return Option<T>
      */
     abstract public function orElse(Closure $op): Option;
 
     /**
      * The attached pass-through args will be unpacked into extra args into chained closures
      *
-     * @param array ...$args
+     * @param mixed ...$args
      * @return Option
+     * @psalm-return Option<T>
      */
     abstract public function with(...$args): Option;
 
     /**
      * Create a Some<T> if T is something using isset(T), None otherwise
      *
+     * @template V
+     *
      * @param mixed $thing
-     * @return Option Option<T>
+     * @psalm-param V|null $thing
+     * @return Option Option<V>
+     * @psalm-return Option<V>
      */
     public static function fromNullable($thing): Option
     {
@@ -194,8 +236,12 @@ abstract class Option
     /**
      * Create a Some<T> if T is non-empty using empty(T), None otherwise
      *
+     * @template V
+     *
      * @param mixed $thing
-     * @return Option Option<T>
+     * @psalm-param V|null $thing
+     * @return Option Option<V>
+     * @psalm-return Option<V>
      */
     public static function fromEmptyable($thing): Option
     {
@@ -205,9 +251,11 @@ abstract class Option
     /**
      * Iterates over T and creates a Some<V> from the first item, returning None if T is empty
      *
-     * @param array|Iterable $iterable T<V>
+     * @param array|Traversable $iterable T<V>
      * @return Option Option<V>
      * @throws OptionException
+     *
+     * @psalm-suppress DocblockTypeContradiction We cannot be completely sure, that in argument valid type
      */
     public static function fromFirst($iterable): Option
     {

@@ -63,10 +63,7 @@ class None extends Option
     /**
      * Unwraps a result, yielding the content of a Some.
      *
-     * @template X as Exception
-     *
      * @param Exception $msg
-     * @psalm-param X&Exception $msg
      * @return void
      * @psalm-return never-return
      * @throws Exception the message if the value is a None.

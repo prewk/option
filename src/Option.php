@@ -40,10 +40,7 @@ abstract class Option
     /**
      * Unwraps a result, yielding the content of a Some.
      *
-     * @template X as Exception
-     *
      * @param Exception $msg
-     * @psalm-param X&Exception $msg
      * @return mixed
      * @psalm-return T
      * @throws Exception the message if the value is a None.

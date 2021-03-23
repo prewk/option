@@ -28,13 +28,14 @@ class None extends Option
 {
     /**
      * @var array
+     * @psalm-var list<mixed>
      */
     private $pass;
 
     /**
      * None constructor
      *
-     * @param array ...$pass
+     * @param mixed ...$pass
      */
     public function __construct(...$pass) {
         $this->pass = $pass;

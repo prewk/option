@@ -223,6 +223,7 @@ abstract class Option
      *
      * @param array $coll C
      * @param mixed $key
+     * @psalm-param array-key $key
      * @return Option Option<V>
      */
     public static function fromKey(array $coll, $key): Option

@@ -34,6 +34,7 @@ class Some extends Option
 
     /**
      * @var array
+     * @psalm-var list<mixed>
      */
     private $pass;
 
@@ -42,7 +43,7 @@ class Some extends Option
      *
      * @param mixed $value
      * @psalm-param T $value
-     * @param array ...$pass
+     * @param mixed ...$pass
      */
     public function __construct($value, ...$pass)
     {

@@ -246,20 +246,18 @@ abstract class Option
     }
 
     /**
-     * Iterates over T and creates a Some<V> from the first item, returning None if T is empty
+     * Iterates over an iterable and creates a Some<V> from the first item, returning None if the iterable is empty
      *
-     * @param array|Traversable $iterable T<V>
-     * @return Option Option<V>
+     * @template V
+     *
+     * @param iterable $iterable
+     * @psalm-param iterable<V> $iterable
+     * @return Option
+     * @psalm-return Option<V>
      * @throws OptionException
-     *
-     * @psalm-suppress DocblockTypeContradiction We cannot be completely sure, that in argument valid type
      */
-    public static function fromFirst($iterable): Option
+    public static function fromFirst(iterable $iterable): Option
     {
-        if (!is_array($iterable) && !($iterable instanceof Traversable)) {
-            throw new OptionException("Couldn't create Option from first item in non-iterable");
-        }
-
         foreach ($iterable as $item) {
             return new Some($item);
         }

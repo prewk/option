@@ -259,10 +259,4 @@ class SomeSpec extends ObjectBehavior
         $this->beConstructedThrough("fromFirst", [[]]);
         $this->shouldHaveType(None::class);
     }
-
-    function it_throws_on_non_iterable()
-    {
-        $this->beConstructedThrough("fromFirst", [null]);
-        $this->shouldThrow(OptionException::class)->duringInstantiation();
-    }
 }

@@ -4,31 +4,34 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3de46b1f90a430fc5714ec4b97857967",
+    "content-hash": "06904c93ecd94d0ac8e73536c322e9c3",
     "packages": [
         {
             "name": "prewk/result",
-            "version": "2.1.1",
+            "version": "3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/prewk/result.git",
-                "reference": "70add2dabb799541f4cd23bccd27b0e61193a34e"
+                "reference": "796bad7183f7eb2c338377ca652a02df36581f04"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/prewk/result/zipball/70add2dabb799541f4cd23bccd27b0e61193a34e",
-                "reference": "70add2dabb799541f4cd23bccd27b0e61193a34e",
+                "url": "https://api.github.com/repos/prewk/result/zipball/796bad7183f7eb2c338377ca652a02df36581f04",
+                "reference": "796bad7183f7eb2c338377ca652a02df36581f04",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.0",
-                "prewk/option": "*"
+                "php": ">=7.3.0",
+                "prewk/option": ">= 1.3.0"
             },
             "require-dev": {
-                "leanphp/phpspec-code-coverage": "^3.1",
-                "phpspec/phpspec": "^3.2",
-                "satooshi/php-coveralls": "^1.0",
-                "vimeo/psalm": "^3.2"
+                "friends-of-phpspec/phpspec-code-coverage": "^6.0.0",
+                "guzzlehttp/guzzle": "^7.3.0",
+                "php-coveralls/php-coveralls": "^2.4.3",
+                "phpspec/phpspec": "^7.0.1",
+                "phpunit/php-code-coverage": "^9.2.5",
+                "phpunit/php-file-iterator": "^3.0.5",
+                "vimeo/psalm": "^4.6.4"
             },
             "type": "library",
             "autoload": {
@@ -49,9 +52,9 @@
             "description": "Result object for PHP inspired by Rust",
             "support": {
                 "issues": "https://github.com/prewk/result/issues",
-                "source": "https://github.com/prewk/result/tree/2.1.1"
+                "source": "https://github.com/prewk/result/tree/3.0.0"
             },
-            "time": "2019-05-12T09:12:49+00:00"
+            "time": "2021-03-24T19:00:08+00:00"
         }
     ],
     "packages-dev": [

@@ -32,5 +32,10 @@
         "php-coveralls/php-coveralls": "^2.4.3",
         "guzzlehttp/guzzle": "^7.3.0",
         "vimeo/psalm": "^4.6.4"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "3.x-dev"
+        }
     }
 }

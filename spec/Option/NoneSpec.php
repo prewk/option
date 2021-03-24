@@ -51,7 +51,7 @@ class NoneSpec extends ObjectBehavior
 
     function it_doesnt_map()
     {
-        $this->map(function() {})->shouldBe($this);
+        $this->map(function() {})->shouldHaveType(None::class);
     }
 
     function it_mapOrs()

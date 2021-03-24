@@ -124,7 +124,7 @@ class None extends Option
      */
     public function map(Closure $mapper): Option
     {
-        return $this;
+        return new self(...$this->pass);
     }
 
     /**
@@ -185,7 +185,7 @@ class None extends Option
      */
     public function and(Option $optb): Option
     {
-        return $this;
+        return new self(...$this->pass);
     }
 
     /**
@@ -201,7 +201,7 @@ class None extends Option
      */
     public function andThen(Closure $op): Option
     {
-        return $this;
+        return new self(...$this->pass);
     }
 
     /**

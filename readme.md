@@ -2,6 +2,10 @@
 
 A PHP implementation of [Rust's Option type](https://doc.rust-lang.org/std/option/enum.Option.html) with roughly the same API.
 
+## Version information
+
+Version 3.x.x requires PHP 7.3+. Make sure you match the versions for this and the [Result](https://github.com/prewk/result) library if you use both.
+
 ## Installation
 
 ```php
@@ -45,4 +49,3 @@ $value = findSomething()->expect(new Exception("Oh noes!"));
 ## License
 
 MIT & Apache 2.0
-

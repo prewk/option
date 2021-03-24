@@ -28,13 +28,14 @@ class None extends Option
 {
     /**
      * @var array
+     * @psalm-var list<mixed>
      */
     private $pass;
 
     /**
      * None constructor
      *
-     * @param array ...$pass
+     * @param mixed ...$pass
      */
     public function __construct(...$pass) {
         $this->pass = $pass;
@@ -123,7 +124,7 @@ class None extends Option
      */
     public function map(Closure $mapper): Option
     {
-        return $this;
+        return new self(...$this->pass);
     }
 
     /**
@@ -184,7 +185,7 @@ class None extends Option
      */
     public function and(Option $optb): Option
     {
-        return $this;
+        return new self(...$this->pass);
     }
 
     /**
@@ -200,7 +201,7 @@ class None extends Option
      */
     public function andThen(Closure $op): Option
     {
-        return $this;
+        return new self(...$this->pass);
     }
 
     /**

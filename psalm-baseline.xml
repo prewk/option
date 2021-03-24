@@ -1,21 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <files psalm-version="4.6.4@97fe86c4e158b5a57c5150aa5055c38b5a809aab">
-  <file src="src/Option.php">
-    <MixedArgument occurrences="1">
-      <code>$key</code>
-    </MixedArgument>
-  </file>
   <file src="src/Option/None.php">
-    <InvalidReturnStatement occurrences="3">
-      <code>$this</code>
-      <code>$this</code>
-      <code>$this</code>
-    </InvalidReturnStatement>
-    <InvalidReturnType occurrences="3">
-      <code>Option&lt;U&gt;</code>
-      <code>Option&lt;U&gt;</code>
-      <code>Option&lt;U&gt;</code>
-    </InvalidReturnType>
     <MixedArgument occurrences="2">
       <code>$this-&gt;pass</code>
       <code>$this-&gt;pass</code>

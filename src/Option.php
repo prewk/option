@@ -40,10 +40,13 @@ abstract class Option
     /**
      * Unwraps a result, yielding the content of a Some.
      *
+     * @template E of Exception
      * @param Exception $msg
+     * @psalm-param E $msg
      * @return mixed
      * @psalm-return T
      * @throws Exception the message if the value is a None.
+     * @phpstan-throws E
      */
     abstract public function expect(Exception $msg);
 

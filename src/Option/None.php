@@ -1,4 +1,5 @@
 <?php
+
 /**
  * None
  *
@@ -10,7 +11,6 @@ declare(strict_types=1);
 
 namespace Prewk\Option;
 
-use Closure;
 use Exception;
 use Prewk\Option;
 use Prewk\Result;
@@ -37,7 +37,8 @@ class None extends Option
      *
      * @param mixed ...$pass
      */
-    public function __construct(...$pass) {
+    public function __construct(...$pass)
+    {
         $this->pass = $pass;
     }
 
@@ -100,14 +101,14 @@ class None extends Option
     }
 
     /**
-     * Returns the contained value or computes it from a closure.
+     * Returns the contained value or computes it from a callable.
      *
-     * @param Closure $op
-     * @psalm-param Closure(mixed...):T $op
+     * @param callable $op
+     * @psalm-param callable(mixed...):T $op
      * @return mixed
      * @psalm-return T
      */
-    public function unwrapOrElse(Closure $op)
+    public function unwrapOrElse(callable $op)
     {
         return $op(...$this->pass);
     }
@@ -117,12 +118,12 @@ class None extends Option
      *
      * @template U
      *
-     * @param Closure $mapper
-     * @psalm-param Closure(T=,mixed...):U $mapper
+     * @param callable $mapper
+     * @psalm-param callable(T=,mixed...):U $mapper
      * @return Option
      * @psalm-return Option<U>
      */
-    public function map(Closure $mapper): Option
+    public function map(callable $mapper): Option
     {
         return new self(...$this->pass);
     }
@@ -134,12 +135,12 @@ class None extends Option
      *
      * @param mixed $default
      * @psalm-param U $default
-     * @param Closure $mapper
-     * @psalm-param Closure(T=,mixed...):U $mapper
+     * @param callable $mapper
+     * @psalm-param callable(T=,mixed...):U $mapper
      * @return mixed
      * @psalm-return U
      */
-    public function mapOr($default, Closure $mapper)
+    public function mapOr($default, callable $mapper)
     {
         return $default;
     }
@@ -149,14 +150,14 @@ class None extends Option
      *
      * @template U
      *
-     * @param Closure $default
-     * @psalm-param Closure(mixed...):U $default
-     * @param Closure $mapper
-     * @psalm-param Closure(T=,mixed...):U $mapper
+     * @param callable $default
+     * @psalm-param callable(mixed...):U $default
+     * @param callable $mapper
+     * @psalm-param callable(T=,mixed...):U $mapper
      * @return mixed
      * @psalm-return U
      */
-    public function mapOrElse(Closure $default, Closure $mapper)
+    public function mapOrElse(callable $default, callable $mapper)
     {
         return $default(...$this->pass);
     }
@@ -194,12 +195,12 @@ class None extends Option
      *
      * @template U
      *
-     * @param Closure $op
-     * @psalm-param Closure(T=,mixed...):Option<U> $op
+     * @param callable $op
+     * @psalm-param callable(T=,mixed...):Option<U> $op
      * @return Option
      * @psalm-return Option<U>
      */
-    public function andThen(Closure $op): Option
+    public function andThen(callable $op): Option
     {
         return new self(...$this->pass);
     }
@@ -220,17 +221,17 @@ class None extends Option
     /**
      * Returns the option if it contains a value, otherwise calls op and returns the result.
      *
-     * @param Closure $op
-     * @psalm-param Closure(mixed...):Option<T> $op
+     * @param callable $op
+     * @psalm-param callable(mixed...):Option<T> $op
      * @return Option
      * @psalm-return Option<T>
      *
-     * @throws OptionException on closure return type mismatch
-     * @psalm-assert !Closure():Option $op
+     * @throws OptionException on callable return type mismatch
+     * @psalm-assert !callable():Option $op
      *
      * @psalm-suppress DocblockTypeContradiction We cannot be completely sure, that in argument valid callable
      */
-    public function orElse(Closure $op): Option
+    public function orElse(callable $op): Option
     {
         $option = $op(...$this->pass);
 
@@ -261,18 +262,18 @@ class None extends Option
      *
      * @template E
      *
-     * @param Closure $err
-     * @psalm-param Closure(mixed...):E $err
+     * @param callable $err
+     * @psalm-param callable(mixed...):E $err
      * @return Result
      * @psalm-return Result<T, E>
      */
-    public function okOrElse(Closure $err): Result
+    public function okOrElse(callable $err): Result
     {
         return new Err($err(...$this->pass), ...$this->pass);
     }
 
     /**
-     * The attached pass-through args will be unpacked into extra args into chained closures
+     * The attached pass-through args will be unpacked into extra args into chained callables
      *
      * @param mixed ...$args
      * @return Option

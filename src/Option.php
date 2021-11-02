@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Option
  *
@@ -10,7 +11,6 @@ declare(strict_types=1);
 
 namespace Prewk;
 
-use Closure;
 use Exception;
 use Prewk\Option\{OptionException, Some, None};
 use Traversable;
@@ -70,26 +70,26 @@ abstract class Option
     abstract public function unwrapOr($optb);
 
     /**
-     * Returns the contained value or computes it from a closure.
+     * Returns the contained value or computes it from a callable.
      *
-     * @param Closure $op
-     * @psalm-param Closure(mixed...):T $op
+     * @param callable $op
+     * @psalm-param callable(mixed...):T $op
      * @return mixed
      * @psalm-return T
      */
-    abstract public function unwrapOrElse(Closure $op);
+    abstract public function unwrapOrElse(callable $op);
 
     /**
      * Maps an Option by applying a function to a contained Some value, leaving a None value untouched.
      *
      * @template U
      *
-     * @param Closure $mapper
-     * @psalm-param Closure(T=,mixed...):U $mapper
+     * @param callable $mapper
+     * @psalm-param callable(T=,mixed...):U $mapper
      * @return Option
      * @psalm-return Option<U>
      */
-    abstract public function map(Closure $mapper): Option;
+    abstract public function map(callable $mapper): Option;
 
     /**
      * Applies a function to the contained value (if any), or returns a default (if not).
@@ -98,26 +98,26 @@ abstract class Option
      *
      * @param mixed $default
      * @psalm-param U $default
-     * @param Closure $mapper
-     * @psalm-param Closure(T=,mixed...):U $mapper
+     * @param callable $mapper
+     * @psalm-param callable(T=,mixed...):U $mapper
      * @return mixed
      * @psalm-return U
      */
-    abstract public function mapOr($default, Closure $mapper);
+    abstract public function mapOr($default, callable $mapper);
 
     /**
      * Applies a function to the contained value (if any), or computes a default (if not).
      *
      * @template U
      *
-     * @param Closure $default
-     * @psalm-param Closure(mixed...):U $default
-     * @param Closure $mapper
-     * @psalm-param Closure(T=,mixed...):U $mapper
+     * @param callable $default
+     * @psalm-param callable(mixed...):U $default
+     * @param callable $mapper
+     * @psalm-param callable(T=,mixed...):U $mapper
      * @return mixed
      * @psalm-return U
      */
-    abstract public function mapOrElse(Closure $default, Closure $mapper);
+    abstract public function mapOrElse(callable $default, callable $mapper);
 
     /**
      * Transforms the Option<T> into a Result<T, E>, mapping Some(v) to Ok(v) and None to Err(err).
@@ -136,12 +136,12 @@ abstract class Option
      *
      * @template E
      *
-     * @param Closure $err
-     * @psalm-param Closure(mixed...):E $err
+     * @param callable $err
+     * @psalm-param callable(mixed...):E $err
      * @return Result
      * @psalm-return Result<T, E>
      */
-    abstract public function okOrElse(Closure $err): Result;
+    abstract public function okOrElse(callable $err): Result;
 
     /**
      * Returns an iterator over the possibly contained value.
@@ -170,12 +170,12 @@ abstract class Option
      *
      * @template U
      *
-     * @param Closure $op
-     * @psalm-param Closure(T=,mixed...):Option<U> $op
+     * @param callable $op
+     * @psalm-param callable(T=,mixed...):Option<U> $op
      * @return Option
      * @psalm-return Option<U>
      */
-    abstract public function andThen(Closure $op): Option;
+    abstract public function andThen(callable $op): Option;
 
     /**
      * Returns the option if it contains a value, otherwise returns optb.
@@ -190,15 +190,15 @@ abstract class Option
     /**
      * Returns the option if it contains a value, otherwise calls op and returns the result.
      *
-     * @param Closure $op
-     * @psalm-param Closure(mixed...):Option<T> $op
+     * @param callable $op
+     * @psalm-param callable(mixed...):Option<T> $op
      * @return Option
      * @psalm-return Option<T>
      */
-    abstract public function orElse(Closure $op): Option;
+    abstract public function orElse(callable $op): Option;
 
     /**
-     * The attached pass-through args will be unpacked into extra args into chained closures
+     * The attached pass-through args will be unpacked into extra args into chained callables
      *
      * @param mixed ...$args
      * @return Option

@@ -12,8 +12,7 @@ declare(strict_types=1);
 namespace Prewk;
 
 use Exception;
-use Prewk\Option\{OptionException, Some, None};
-use Traversable;
+use Prewk\Option\{None, OptionException, Some};
 
 /**
  * Describes an optional value
@@ -26,35 +25,32 @@ abstract class Option
     /**
      * Returns true if the option is a Some value.
      *
-     * @return bool
+     * @psalm-assert-if-true Some<T> $this
+     * @psalm-assert-if-false None<T> $this
      */
     abstract public function isSome(): bool;
 
     /**
      * Returns true if the option is a None value.
      *
-     * @return bool
+     * @psalm-assert-if-true None<T> $this
+     * @psalm-assert-if-false Some<T> $this
      */
     abstract public function isNone(): bool;
 
     /**
      * Unwraps a result, yielding the content of a Some.
      *
-     * @template E of Exception
-     * @param Exception $msg
-     * @psalm-param E $msg
-     * @return mixed
-     * @psalm-return T
+     * @return T
+     *
      * @throws Exception the message if the value is a None.
-     * @phpstan-throws E
      */
     abstract public function expect(Exception $msg);
 
     /**
      * Unwraps an option, yielding the content of a Some.
      *
-     * @return mixed
-     * @psalm-return T
+     * @return T
      * @throws OptionException if the value is a None.
      */
     abstract public function unwrap();
@@ -62,46 +58,45 @@ abstract class Option
     /**
      * Unwraps a result, yielding the content of a Some. Else, it returns optb.
      *
-     * @param mixed $optb
-     * @psalm-param T $optb
-     * @return mixed
-     * @psalm-return T
+     * @param T $optb
+     * @return T
      */
     abstract public function unwrapOr($optb);
 
     /**
      * Returns the contained value or computes it from a callable.
      *
-     * @param callable $op
-     * @psalm-param callable(mixed...):T $op
-     * @return mixed
-     * @psalm-return T
+     * @param callable(mixed...): T $op
+     * @return T
      */
     abstract public function unwrapOrElse(callable $op);
+
+    /**
+     * Calls a function with a reference to the contained value if Some.
+     *
+     * @param callable(T,mixed...):void $f
+     * @return Option<T>
+     */
+    abstract public function inspect(callable $f): self;
 
     /**
      * Maps an Option by applying a function to a contained Some value, leaving a None value untouched.
      *
      * @template U
      *
-     * @param callable $mapper
-     * @psalm-param callable(T=,mixed...):U $mapper
-     * @return Option
-     * @psalm-return Option<U>
+     * @param callable(T=,mixed...):U $mapper
+     * @return Option<U>
      */
-    abstract public function map(callable $mapper): Option;
+    abstract public function map(callable $mapper): self;
 
     /**
      * Applies a function to the contained value (if any), or returns a default (if not).
      *
      * @template U
      *
-     * @param mixed $default
-     * @psalm-param U $default
-     * @param callable $mapper
-     * @psalm-param callable(T=,mixed...):U $mapper
-     * @return mixed
-     * @psalm-return U
+     * @param U $default
+     * @param callable(T=,mixed...):U $mapper
+     * @return U
      */
     abstract public function mapOr($default, callable $mapper);
 
@@ -110,12 +105,9 @@ abstract class Option
      *
      * @template U
      *
-     * @param callable $default
-     * @psalm-param callable(mixed...):U $default
-     * @param callable $mapper
-     * @psalm-param callable(T=,mixed...):U $mapper
-     * @return mixed
-     * @psalm-return U
+     * @param callable(mixed...):U $default
+     * @param callable(T=,mixed...):U $mapper
+     * @return U
      */
     abstract public function mapOrElse(callable $default, callable $mapper);
 
@@ -124,10 +116,8 @@ abstract class Option
      *
      * @template E
      *
-     * @param mixed $err
-     * @psalm-param E $err
-     * @return Result
-     * @psalm-return Result<T, E>
+     * @param E $err
+     * @return Result<T, E>
      */
     abstract public function okOr($err): Result;
 
@@ -136,10 +126,8 @@ abstract class Option
      *
      * @template E
      *
-     * @param callable $err
-     * @psalm-param callable(mixed...):E $err
-     * @return Result
-     * @psalm-return Result<T, E>
+     * @param callable(mixed...):E $err
+     * @return Result<T, E>
      */
     abstract public function okOrElse(callable $err): Result;
 
@@ -147,8 +135,7 @@ abstract class Option
      * Returns an iterator over the possibly contained value.
      * The iterator yields one value if the result is Some, otherwise none.
      *
-     * @return array
-     * @psalm-return array<int, T>
+     * @return list<T>
      */
     abstract public function iter(): array;
 
@@ -157,12 +144,10 @@ abstract class Option
      *
      * @template U
      *
-     * @param Option $optb
-     * @psalm-param Option<U> $optb
-     * @return Option
-     * @psalm-return Option<U>
+     * @param Option<U> $optb
+     * @return Option<U>
      */
-    abstract public function and(Option $optb): Option;
+    abstract public function and(self $optb): self;
 
     /**
      * Returns None if the option is None, otherwise calls op with the wrapped value and returns the result.
@@ -170,68 +155,70 @@ abstract class Option
      *
      * @template U
      *
-     * @param callable $op
-     * @psalm-param callable(T=,mixed...):Option<U> $op
-     * @return Option
-     * @psalm-return Option<U>
+     * @param callable(T=,mixed...):Option<U> $op
+     * @return Option<U>
      */
-    abstract public function andThen(callable $op): Option;
+    abstract public function andThen(callable $op): self;
+
+    /**
+     * Returns None if the option is None, otherwise calls predicate with the wrapped value and returns:
+     * - Some(t) if predicate returns true (where t is the wrapped value), and
+     * - None if predicate returns false.
+     *
+     * @param callable(T,mixed...):bool $predicate
+     * @return Option<T>
+     */
+    abstract public function filter(callable $predicate): self;
 
     /**
      * Returns the option if it contains a value, otherwise returns optb.
      *
-     * @param Option $optb
-     * @psalm-param Option<T> $optb
-     * @return Option
-     * @psalm-return Option<T>
+     * @param Option<T> $optb
+     * @return Option<T>
      */
-    abstract public function or(Option $optb): Option;
+    abstract public function or(self $optb): self;
 
     /**
      * Returns the option if it contains a value, otherwise calls op and returns the result.
      *
-     * @param callable $op
-     * @psalm-param callable(mixed...):Option<T> $op
-     * @return Option
-     * @psalm-return Option<T>
+     * @param callable(mixed...):Option<T> $op
+     * @return Option<T>
      */
-    abstract public function orElse(callable $op): Option;
+    abstract public function orElse(callable $op): self;
 
     /**
      * The attached pass-through args will be unpacked into extra args into chained callables
      *
-     * @param mixed ...$args
-     * @return Option
-     * @psalm-return Option<T>
+     * @return Option<T>
      */
-    abstract public function with(...$args): Option;
+    abstract public function with(mixed ...$args): self;
 
     /**
      * Create a Some<T> if T is something using isset(T), None otherwise
      *
      * @template V
      *
-     * @param mixed $thing
-     * @psalm-param V|null $thing
-     * @return Option Option<V>
-     * @psalm-return Option<V>
+     * @param V $thing
+     * @return Option<V>
      */
-    public static function fromNullable($thing): Option
+    public static function fromNullable($thing): self
     {
-        return isset($thing) ? new Some($thing) : new None;
+        return isset($thing) ? new Some($thing) : new None();
     }
 
     /**
      * Create a Some<V> from C[K] if it exists using array_key_exists(C, K), None otherwise
      *
-     * @param array $coll C
-     * @param mixed $key
-     * @psalm-param array-key $key
-     * @return Option Option<V>
+     * @template K of array-key
+     * @template V
+     *
+     * @param array<K, V> $coll C
+     * @param K $key
+     * @return Option<V>
      */
-    public static function fromKey(array $coll, $key): Option
+    public static function fromKey(array $coll, $key): self
     {
-        return array_key_exists($key, $coll) ? new Some($coll[$key]) : new None;
+        return array_key_exists($key, $coll) ? new Some($coll[$key]) : new None();
     }
 
     /**
@@ -239,14 +226,12 @@ abstract class Option
      *
      * @template V
      *
-     * @param mixed $thing
-     * @psalm-param V|null $thing
-     * @return Option Option<V>
-     * @psalm-return Option<V>
+     * @param V $thing
+     * @return Option<V>
      */
-    public static function fromEmptyable($thing): Option
+    public static function fromEmptyable($thing): self
     {
-        return !empty($thing) ? new Some($thing) : new None;
+        return ! empty($thing) ? new Some($thing) : new None();
     }
 
     /**
@@ -254,18 +239,15 @@ abstract class Option
      *
      * @template V
      *
-     * @param iterable $iterable
-     * @psalm-param iterable<V> $iterable
-     * @return Option
-     * @psalm-return Option<V>
-     * @throws OptionException
+     * @param iterable<V> $iterable
+     * @return Option<V>
      */
-    public static function fromFirst(iterable $iterable): Option
+    public static function fromFirst(iterable $iterable): self
     {
         foreach ($iterable as $item) {
             return new Some($item);
         }
 
-        return new None;
+        return new None();
     }
 }

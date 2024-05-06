@@ -14,5 +14,6 @@ use Exception;
 /**
  * OptionException
  */
-class OptionException extends Exception
-{}
+final class OptionException extends Exception
+{
+}

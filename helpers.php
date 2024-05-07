@@ -5,7 +5,7 @@
  * @author Oskar Thornblad
  */
 
-if (!function_exists("some")) {
+if (! function_exists('some')) {
     /**
      * Represent the existance of a value
      *
@@ -13,24 +13,23 @@ if (!function_exists("some")) {
      *
      * @template T
      *
-     * @param mixed $value
-     * @psalm-param T $value
-     * @return Prewk\Option\Some
-     * @psalm-return Prewk\Option\Some<T>
+     * @param T $value
+     * @return \Prewk\Option\Some<T>
      */
-    function some($value): Prewk\Option\Some {
-        return new Prewk\Option\Some($value);
+    function some($value): \Prewk\Option\Some
+    {
+        return new \Prewk\Option\Some($value);
     }
 }
 
-if (!function_exists("none")) {
+if (! function_exists('none')) {
     /**
      * Represent a lack of value
      *
      * @codeCoverageIgnore
-     * @return Prewk\Option\None
      */
-    function none(): Prewk\Option\None {
-        return new Prewk\Option\None;
+    function none(): \Prewk\Option\None
+    {
+        return new \Prewk\Option\None();
     }
 }

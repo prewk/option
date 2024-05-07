@@ -111,7 +111,7 @@ class Some extends Option
         return new Ok($this->value, ...$this->pass);
     }
 
-    public function iter(): array
+    public function iter(): iterable
     {
         return [$this->value];
     }

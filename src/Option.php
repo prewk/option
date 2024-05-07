@@ -135,9 +135,9 @@ abstract class Option
      * Returns an iterator over the possibly contained value.
      * The iterator yields one value if the result is Some, otherwise none.
      *
-     * @return list<T>
+     * @return iterable<int, T>
      */
-    abstract public function iter(): array;
+    abstract public function iter(): iterable;
 
     /**
      * Returns None if the option is None, otherwise returns optb.

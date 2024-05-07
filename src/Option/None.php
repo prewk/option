@@ -102,7 +102,7 @@ class None extends Option
         return new Err($err(...$this->pass), ...$this->pass);
     }
 
-    public function iter(): array
+    public function iter(): iterable
     {
         return [];
     }

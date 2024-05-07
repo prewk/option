@@ -136,13 +136,4 @@ final class SomeTest extends TestCase
 
         self::assertSame($some, $some->orElse(static fn () => new Some('bar')));
     }
-
-    public function testItHandlesPass(): void
-    {
-        /** @var Some<string> */
-        $some = new Some('foo', 'bar', 0);
-
-        self::assertEquals(new Some(0), $some->map(static fn (string $value, string $aString, int $anInt) => $anInt));
-        self::assertEquals(new Some(1), $some->with(1)->map(static fn (string $value, int $anInt) => $anInt));
-    }
 }

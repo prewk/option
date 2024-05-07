@@ -66,7 +66,7 @@ abstract class Option
     /**
      * Returns the contained value or computes it from a callable.
      *
-     * @param callable(mixed...): T $op
+     * @param callable(): T $op
      * @return T
      */
     abstract public function unwrapOrElse(callable $op);
@@ -74,7 +74,7 @@ abstract class Option
     /**
      * Calls a function with a reference to the contained value if Some.
      *
-     * @param callable(T,mixed...):void $f
+     * @param callable(T):void $f
      * @return Option<T>
      */
     abstract public function inspect(callable $f): self;
@@ -84,7 +84,7 @@ abstract class Option
      *
      * @template U
      *
-     * @param callable(T=,mixed...):U $mapper
+     * @param callable(T=):U $mapper
      * @return Option<U>
      */
     abstract public function map(callable $mapper): self;
@@ -95,7 +95,7 @@ abstract class Option
      * @template U
      *
      * @param U $default
-     * @param callable(T=,mixed...):U $mapper
+     * @param callable(T=):U $mapper
      * @return U
      */
     abstract public function mapOr($default, callable $mapper);
@@ -105,8 +105,8 @@ abstract class Option
      *
      * @template U
      *
-     * @param callable(mixed...):U $default
-     * @param callable(T=,mixed...):U $mapper
+     * @param callable():U $default
+     * @param callable(T=):U $mapper
      * @return U
      */
     abstract public function mapOrElse(callable $default, callable $mapper);
@@ -126,7 +126,7 @@ abstract class Option
      *
      * @template E
      *
-     * @param callable(mixed...):E $err
+     * @param callable():E $err
      * @return Result<T, E>
      */
     abstract public function okOrElse(callable $err): Result;
@@ -155,7 +155,7 @@ abstract class Option
      *
      * @template U
      *
-     * @param callable(T=,mixed...):Option<U> $op
+     * @param callable(T=):Option<U> $op
      * @return Option<U>
      */
     abstract public function andThen(callable $op): self;
@@ -165,7 +165,7 @@ abstract class Option
      * - Some(t) if predicate returns true (where t is the wrapped value), and
      * - None if predicate returns false.
      *
-     * @param callable(T,mixed...):bool $predicate
+     * @param callable(T):bool $predicate
      * @return Option<T>
      */
     abstract public function filter(callable $predicate): self;
@@ -181,17 +181,10 @@ abstract class Option
     /**
      * Returns the option if it contains a value, otherwise calls op and returns the result.
      *
-     * @param callable(mixed...):Option<T> $op
+     * @param callable():Option<T> $op
      * @return Option<T>
      */
     abstract public function orElse(callable $op): self;
-
-    /**
-     * The attached pass-through args will be unpacked into extra args into chained callables
-     *
-     * @return Option<T>
-     */
-    abstract public function with(mixed ...$args): self;
 
     /**
      * Create a Some<T> if T is something using isset(T), None otherwise

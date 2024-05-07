@@ -139,19 +139,4 @@ final class NoneTest extends TestCase
 
         self::assertSame($optb, (new None())->orElse(static fn () => $optb));
     }
-
-    /**
-     * @uses \Prewk\Option\Some
-     */
-    public function testItHandlesPass(): void
-    {
-        /** @var None<string> */
-        $none = new None('bar');
-
-        self::assertEquals(new Some('bar'), $none->orElse(static fn (string $aString) => new Some($aString)));
-        self::assertEquals(
-            new Some('baz'),
-            $none->with('baz')->orElse(static fn (string $aString) => new Some($aString))
-        );
-    }
 }

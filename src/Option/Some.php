@@ -27,20 +27,13 @@ use Prewk\Result\Ok;
 class Some extends Option
 {
     /**
-     * @var array<array-key, mixed>
-     */
-    private array $pass;
-
-    /**
      * Some constructor.
      *
      * @param T $value
      */
     public function __construct(
         private $value,
-        mixed ...$pass
     ) {
-        $this->pass = $pass;
     }
 
     public function isSome(): bool
@@ -81,34 +74,34 @@ class Some extends Option
 
     public function inspect(callable $f): Option
     {
-        $f($this->value, ...$this->pass);
+        $f($this->value);
 
         return $this;
     }
 
     public function map(callable $mapper): Option
     {
-        return new self($mapper($this->value, ...$this->pass));
+        return new self($mapper($this->value));
     }
 
     public function mapOr($default, callable $mapper)
     {
-        return $mapper($this->value, ...$this->pass);
+        return $mapper($this->value);
     }
 
     public function mapOrElse(callable $default, callable $mapper)
     {
-        return $mapper($this->value, ...$this->pass);
+        return $mapper($this->value);
     }
 
     public function okOr($err): Result
     {
-        return new Ok($this->value, ...$this->pass);
+        return new Ok($this->value);
     }
 
     public function okOrElse(callable $err): Result
     {
-        return new Ok($this->value, ...$this->pass);
+        return new Ok($this->value);
     }
 
     public function iter(): array
@@ -123,12 +116,12 @@ class Some extends Option
 
     public function andThen(callable $op): Option
     {
-        return $op($this->value, ...$this->pass);
+        return $op($this->value);
     }
 
     public function filter(callable $predicate): Option
     {
-        if ($predicate($this->value, ...$this->pass)) {
+        if ($predicate($this->value)) {
             return $this;
         }
 
@@ -142,13 +135,6 @@ class Some extends Option
 
     public function orElse(callable $op): Option
     {
-        return $this;
-    }
-
-    public function with(mixed ...$args): Option
-    {
-        $this->pass = $args;
-
         return $this;
     }
 }

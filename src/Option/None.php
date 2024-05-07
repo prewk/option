@@ -26,16 +26,6 @@ use Prewk\Result\Err;
  */
 class None extends Option
 {
-    /**
-     * @var array<array-key, mixed>
-     */
-    private array $pass;
-
-    public function __construct(mixed ...$pass)
-    {
-        $this->pass = $pass;
-    }
-
     public function isSome(): bool
     {
         return false;
@@ -69,7 +59,7 @@ class None extends Option
 
     public function unwrapOrElse(callable $op)
     {
-        return $op(...$this->pass);
+        return $op();
     }
 
     public function inspect(callable $f): Option
@@ -79,7 +69,7 @@ class None extends Option
 
     public function map(callable $mapper): Option
     {
-        return new self(...$this->pass);
+        return new self();
     }
 
     public function mapOr($default, callable $mapper)
@@ -89,17 +79,17 @@ class None extends Option
 
     public function mapOrElse(callable $default, callable $mapper)
     {
-        return $default(...$this->pass);
+        return $default();
     }
 
     public function okOr($err): Result
     {
-        return new Err($err, ...$this->pass);
+        return new Err($err);
     }
 
     public function okOrElse(callable $err): Result
     {
-        return new Err($err(...$this->pass), ...$this->pass);
+        return new Err($err());
     }
 
     public function iter(): iterable
@@ -109,12 +99,12 @@ class None extends Option
 
     public function and(Option $optb): Option
     {
-        return new self(...$this->pass);
+        return new self();
     }
 
     public function andThen(callable $op): Option
     {
-        return new self(...$this->pass);
+        return new self();
     }
 
     public function filter(callable $predicate): Option
@@ -129,13 +119,6 @@ class None extends Option
 
     public function orElse(callable $op): Option
     {
-        return $op(...$this->pass);
-    }
-
-    public function with(mixed ...$args): Option
-    {
-        $this->pass = $args;
-
-        return $this;
+        return $op();
     }
 }

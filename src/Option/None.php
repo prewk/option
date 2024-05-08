@@ -24,7 +24,7 @@ use Prewk\Result\Err;
  *
  * @extends Option<T>
  */
-class None extends Option
+final class None extends Option
 {
     public function isSome(): bool
     {

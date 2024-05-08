@@ -24,7 +24,7 @@ use Prewk\Result\Ok;
  *
  * @extends Option<T>
  */
-class Some extends Option
+final class Some extends Option
 {
     /**
      * Some constructor.

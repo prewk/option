@@ -58,16 +58,20 @@ abstract class Option
     /**
      * Unwraps a result, yielding the content of a Some. Else, it returns optb.
      *
-     * @param T $optb
-     * @return T
+     * @template U
+     *
+     * @param U $optb
+     * @return T|U
      */
     abstract public function unwrapOr($optb);
 
     /**
      * Returns the contained value or computes it from a callable.
      *
-     * @param callable(): T $op
-     * @return T
+     * @template U
+     *
+     * @param callable(): U $op
+     * @return T|U
      */
     abstract public function unwrapOrElse(callable $op);
 
@@ -84,7 +88,7 @@ abstract class Option
      *
      * @template U
      *
-     * @param callable(T=):U $mapper
+     * @param callable(T):U $mapper
      * @return Option<U>
      */
     abstract public function map(callable $mapper): self;
@@ -95,7 +99,7 @@ abstract class Option
      * @template U
      *
      * @param U $default
-     * @param callable(T=):U $mapper
+     * @param callable(T):U $mapper
      * @return U
      */
     abstract public function mapOr($default, callable $mapper);
@@ -106,7 +110,7 @@ abstract class Option
      * @template U
      *
      * @param callable():U $default
-     * @param callable(T=):U $mapper
+     * @param callable(T):U $mapper
      * @return U
      */
     abstract public function mapOrElse(callable $default, callable $mapper);
